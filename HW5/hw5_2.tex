@@ -1,0 +1,95 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern} % removes bitmap font
+\usepackage{tikz}
+\usepackage{nicematrix}
+\input{./header.tex}
+
+\newcommand{\jan}[1]{\textcolor{red}{Jan: #1}}
+\newcommand{\sahil}[1]{\textcolor{blue}{Sahil: #1}}
+\newcommand{\dy}[1]{\textcolor{purple}{Daniel Y: #1}}
+\newcommand{\mx}[1]{\textcolor{blue}{Max: #1}}
+\newcommand{\sg}[1]{\textcolor{cyan}{Sharay: #1}}
+\newcommand{\ac}[1]{\textcolor{cyan}{Allen: #1}}
+\newcommand{\sera}[1]{\textcolor{magenta}{Sera: #1}}
+\newcommand{\frank}[1]{\textcolor{purple}{Frank: #1}}
+% \newcommand{\joe}[1]{\textcolor{brown}{Joe: #1}}
+\newcommand{\Varun}[1]{\textcolor{brown}{Varun: #1}}
+\newcommand{\aryan}[1]{\textcolor{red} {Aryan: #1}}
+
+\title{Convex Programming\\Problem Set 5 -- CS 6515/4540 (Fall 2025)}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-50pt}
+\noindent
+This problem set is due on \textbf{Tuesday November 4th}. Submission is via Gradescope. Your solution must be a typed pdf (e.g.~via LaTeX) -- no handwritten solutions.
+
+
+
+%\paragraph{Additional Instruction:}
+
+%\jan{collecting exercise ideas.}
+\setcounter{section}{17}
+
+\section{Convex Functions}
+\begin{enumerate} 
+
+\item Given two  convex functions $f : \mathbb{R} \rightarrow \mathbb{R} $ and $g : \mathbb{R} \rightarrow \mathbb{R}$, is the sum $f + g$ also convex? Either prove it or give a counterexample. 
+
+
+\item Given two  convex functions $f : \mathbb{R} \rightarrow \mathbb{R} $ and $g : \mathbb{R} \rightarrow \mathbb{R}$, is the product $fg$ also convex? Either prove it or give a counterexample. 
+\item What about the convexity of the function $h : \mathbb{R} \rightarrow \mathbb{R}$ defined by $h(x) = \max (f(x), g(x))$? Prove it or give a counterexample. 
+\item Show an $\alpha$-strongly convex function (defined in Pb \ref{sec:StrongConvex}) $f : \mathbb{R} \rightarrow \mathbb{R}$ satisfies $f(x) = \Omega(x^2)$
+\end{enumerate}
+
+\section{Gradient Descent Failure}
+ Suppose we run an unconstrained Gradient Descent on $f(x) = \frac{1}{2} x^2$ with some arbitrary step size.  Give (and justify) an example consisting of \begin{enumerate} \item  a step size $\eta > 0$ \item an initial point $x_0 \in \mathbb{R}$ \end{enumerate}such that  $t$-th \textbf{average} $\overline{x}_t = \frac{1}{t}\sum_{i \leq t}x_i$ of an unconstrained Gradient Descent with the above parameters does not converge (e.g it diverges) to the optimum  as $t \rightarrow \infty$. 
+
+\section{Gradient Descent for Strongly-Convex Functions} \label{sec:StrongConvex}
+ A differentiable function $f$ is $\alpha$-strongly convex for $\alpha >0$ if for all $x,y \in \mathbb{R}^n$ we have 
+ \[ f(y) \geq f(x) + \langle \nabla f(x), y-x \rangle + \frac{\alpha}{2}\|y-x\|_2^2 .\]
+ 
+ Consider an $\alpha$-strongly convex differentiable function $f$  with the 2-norm of its gradient always bounded by $G$. The goal is to minimize $f$ and let $x^*$ denote its minimum. 
+ 
+ Show that the  gradient descent algorithm with  step size $\frac{1}{\alpha (t+1)}$ satisfies 
+ \[ f\Big( \frac{\sum_t x_t}{T} \Big) - f(x^*) \leq \frac{G^2 (1+\log T)}{2 \alpha T}.\] 
+ Thus, strong-convexity allows us to get $1/T$ dependency in regret instead of $1/\sqrt{T}$ dependency for general convex functions.
+
+(Hint: Change the potential function in the analysis from class to  $\Phi(t) = \frac{t \alpha}{2} \|x_t - x^* \|^2$. Also, use that $\sum_{t\in \{1,\ldots, T\}}\frac{1}{t} \leq 1+\log T$.)
+
+
+
+\section{Non-Convex Function}
+
+In class we assumed function $f$ is convex. We now want to consider the non-convex case.
+We want to show that for $L$-smooth $f$, after $t$ iterations with step size $\eta \le 1/L$ we can find a point $x'$ with
+$$
+\|\nabla f(x')\| \le \sqrt{\frac{2}{\eta \cdot t} (f(x^0) - f(x^*))}.
+$$
+(Note that for a local optimum we have $\nabla f(x) = 0$, so a small norm $\|\nabla f(x')\|$ indicates that we are close to a local optimum or saddle point.)
+
+%Assume $f$ is an $L$-smooth function. (Not necessarily convex.)
+Proving this from scratch is a bit tricky, so we provide the following subproblems to guide you to a proof. Each subproblem can be solved in a few lines of calculation/algebra.
+\paragraph{Problem:}
+\begin{enumerate}
+    %\item Show
+    %$f(x+\delta) \le f(x) + \nabla f(x)^\top \delta + \frac{L}{2}\|\delta\|^2$
+    \item Show
+    $f(x^{t+1}) \le f(x^t) - \frac{\eta}{2} \|\nabla f(x^t)\|^2$ (Hint: Check the proof from class for convex functions. Does it work for non-convex functions?)
+    \item Show
+    $
+    \sum_{k=0}^t \|\nabla f(x^k)\|^2 \le \frac{2}{\eta} (f(x^0) - f(x^*))
+    $ (Hint: 1.~implies $\frac{\eta}{2} \|\nabla f(x^t)\|^2 \le ...$)
+    \item Show
+    $
+\min_{k=0...t}\|\nabla f(x^k)\| \le \sqrt{\frac{2}{\eta \cdot t} (f(x^0) - f(x^*))}.
+$
+\end{enumerate}
+where $x^*$ is the global optimum $f(x^*) = \min_x f(x)$.
+
+You are allowed to use subproblems to solve later subproblems (e.g., use 1+2 to solve 3), even if you did not prove them. 
+
+
+
+\end{document}

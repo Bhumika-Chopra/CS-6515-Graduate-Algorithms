@@ -1,0 +1,135 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern} % removes bitmap font
+\usepackage{tikz}
+\usepackage{nicematrix}
+\input{./header.tex}
+
+\newcommand{\jan}[1]{\textcolor{red}{Jan: #1}}
+\newcommand{\sahil}[1]{\textcolor{blue}{Sahil: #1}}
+\newcommand{\dy}[1]{\textcolor{purple}{Daniel Y: #1}}
+\newcommand{\mx}[1]{\textcolor{blue}{Max: #1}}
+\newcommand{\sg}[1]{\textcolor{cyan}{Sharay: #1}}
+\newcommand{\ac}[1]{\textcolor{cyan}{Allen: #1}}
+\newcommand{\sera}[1]{\textcolor{magenta}{Sera: #1}}
+\newcommand{\frank}[1]{\textcolor{purple}{Frank: #1}}
+% \newcommand{\joe}[1]{\textcolor{brown}{Joe: #1}}
+\newcommand{\Varun}[1]{\textcolor{brown}{Varun: #1}}
+\newcommand{\aryan}[1]{\textcolor{red} {Aryan: #1}}
+
+\title{Linear Programming\\Problem Set 3 -- CS 6515/4540 (Fall 2025)}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-50pt}
+\noindent
+This problem set is due on \textbf{Tuesday October 2nd}. Submission is via Gradescope. Your solution must be a typed pdf (e.g.~via LaTeX) -- no handwritten solutions.
+
+
+
+%\paragraph{Additional Instruction:}
+
+%\jan{collecting exercise ideas.}
+\setcounter{section}{8}
+
+
+\section{Convex Sets}
+\noindent
+We will study properties of convex sets in the Euclidean space. 
+\begin{enumerate}
+\item Does every convex body $K \subseteq \mathbb{R}^n$ have a finite number of vertices\footnote{Points $u \in K$ is called a vertex if cannot be expressed as a convex combination of some finite number of other points in $K$}? Give a proof or a counterexample. 
+\item Is the intersection of two convex bodies also a convex body? What about union? For each, prove it or give a counterexample. 
+\item Is a convex body in $n$ dimensions always bounded (finite volume) or could be unbounded? Give a proof that it is bounded or a counterexample. 
+
+ \end{enumerate}
+
+
+\section{LPs}
+    Alice is trying to get enough oranges and bananas to host a fruit party. To successfully host a party she needs \textbf{at least 8 oranges} and \textbf{at least 20 bananas}. Unfortunately, her local grocery story only sells fruit in bundles. Bundle A costs 3 dollars and contains one orange and two bananas. Bundle B costs 2 dollars and contains three oranges and a banana. Fortunately, the grocery story will allow Alice to buy fractions of bundles (i.e. she can buy 2.5 bundle As to get 2.5 oranges and 5 bananas). They will not allow Alice to buy negative bundles (i.e. she cannot buy -1 bundle As and 3 bundle Bs to get 5 oranges and a banana). 
+
+\textbf{Alice would like to buy $x_A$ bundle As and $x_B$ bundle Bs to guarantee she has at least 8 oranges and at least 20 bananas.} Moreover, she would like to  minimize her dollars spent. 
+
+\begin{enumerate}
+
+\item  Write a linear program whose solution is the optimal choice of $x_A, x_B$ for Alice's problem and briefly justify why this is the correct LP.
+
+
+
+
+
+
+\item  Show that there exists a solution to this linear program with objective value $30$ (and hence Alice has to spend at most $30$ dollars).
+
+
+
+
+\item  Prove that every feasible solution to this linear program has value at least $30$  (prove this by taking a non-negative linear combination of the constraints), so the solution in the previous part is optimal.
+
+\
+\end{enumerate}
+
+
+\section{LP Equivalent Formulation}
+\begin{enumerate}
+    \item Show that the class of left LPs (LP1) can efficiently represent any LP on the right (LP2). In other words, if we have a polynomial time algorithm to solve any LP1 on the left, then we can solve in polynomial time  any LP2 on the right.
+
+\begin{minipage}{.5\linewidth}
+%\vspace{-0.5cm}
+\begin{align*}
+\tag{LP1} \max& \sum_{i=1}^n c_i x_i\\
+\text{s.t.}\quad \sum_{i=1}^n A_{ji} x_i = b_j, &\quad \forall j \in \{1,\ldots, m\}\\
+x_i \geq 0, &\quad \forall i \in \{1,\ldots,n\}.\\
+\end{align*}
+      \end{minipage}%
+ \quad \vrule{}
+\begin{minipage}{.5\linewidth}
+\begin{align*}
+\tag{LP2} \max &\sum_{i=1}^n c_i x_i\\
+\text{s.t.}\quad \sum_{i=1}^n A_{ji} x_i \leq b_j, &\quad \forall j \in \{1,\ldots,m\} \\
+\end{align*}
+      \end{minipage}
+(Hint: You need two ideas: (1)~We can replace unconstrained $x$ by $x= x^+ - x^-$ where $x^+ \geq 0$ and  $x^- \geq 0$. (2)~We can replace $Ax \leq b$ by $Ax + Z=b$ for some vector $Z\geq 0$.
+)
+
+
+
+      
+    \item Now use a similar idea to show that Farkas' Lemma A below implies Farkas' Lemma B.
+    \begin{itemize}
+
+         \item  Farkas' Lemma A says that the system of inequalities $\sum_{i=1}^n A_{ji} x_i = b_j$ for $j \in \{1,\ldots,m\}$ and $x_i \geq 0$ for $i\in \{1,\ldots, n\}$ are infeasible iff there exist $\lambda_j$ for $j \in \{1,\ldots,m\}$ such that 
+        \[
+        \sum_{j=1}^m \lambda_j b_j <0 \qquad \text{and} \qquad  
+        \sum_{j=1}^m \lambda_j A_{ji} \geq 0  \quad \forall i\in \{1,\ldots, n\}.
+        \]
+
+    
+        \item  Farkas' Lemma B says that the system of inequalities $\sum_{i=1}^n A_{ji} x_i \leq b_j$ for $j \in \{1,\ldots,m\}$   are infeasible iff there exist \emph{non-negative} $\lambda_j \geq 0$ for $j \in \{1,\ldots,m\}$ such that 
+        \[
+        \sum_{j=1}^m \lambda_j b_j < 0 \qquad \text{and} \qquad  
+        \sum_{j=1}^m \lambda_j A_{ji} = 0  \quad \forall i\in \{1,\ldots, n\}.
+        \]
+        \end{itemize}
+
+    
+\end{enumerate}
+
+
+\section{LP for Regression}
+%\begin{enumerate}     \item 
+Suppose we are given $n$ points $(x_1, y_1),(x_2, y_2),...,(x_n, y_n) \in \mathbb{R}\times \mathbb{R}$. The goal of this problem is to find a line $y = ax + b$, where $a,b \in\mathbb{R}$   that fits these points as closely as possible, where closeness is defined according to some objective function.
+Write a polynomial-sized LP for the following settings:
+\begin{enumerate}
+    \item $\ell_1$ regression: Objective is to minimize $ \sum_{i=1}^n |y_i - a x_i -b|$.
+    
+  
+    
+    \item $\ell_\infty$ regression: Objective is to  minimize  $ \max_{i=1}^n |y_i - a x_i -b|$
+
+ 
+
+    \item Write the dual LPs for both the above LPs.
+\end{enumerate}
+
+
+\end{document}

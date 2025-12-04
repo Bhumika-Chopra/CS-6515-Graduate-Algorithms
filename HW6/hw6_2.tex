@@ -1,0 +1,128 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern} % removes bitmap font
+\usepackage{tikz}
+\usepackage{nicematrix}
+\input{./header.tex}
+
+\newcommand{\jan}[1]{\textcolor{red}{Jan: #1}}
+\newcommand{\sahil}[1]{\textcolor{blue}{Sahil: #1}}
+\newcommand{\dy}[1]{\textcolor{purple}{Daniel Y: #1}}
+\newcommand{\mx}[1]{\textcolor{blue}{Max: #1}}
+\newcommand{\sg}[1]{\textcolor{cyan}{Sharay: #1}}
+\newcommand{\ac}[1]{\textcolor{cyan}{Allen: #1}}
+\newcommand{\sera}[1]{\textcolor{magenta}{Sera: #1}}
+\newcommand{\frank}[1]{\textcolor{purple}{Frank: #1}}
+% \newcommand{\joe}[1]{\textcolor{brown}{Joe: #1}}
+\newcommand{\Varun}[1]{\textcolor{brown}{Varun: #1}}
+\newcommand{\aryan}[1]{\textcolor{red} {Aryan: #1}}
+
+\title{Online Convex Optimization \& Complexity\\Problem Set 6 -- CS 6515/4540 (Fall 2025)}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-50pt}
+\noindent
+This problem set is due on \textbf{Monday November 17th}. Submission is via Gradescope. Your solution must be a typed pdf (e.g.~via LaTeX) -- no handwritten solutions.
+
+
+
+%\paragraph{Additional Instruction:}
+
+%\jan{collecting exercise ideas.}
+\setcounter{section}{21}
+
+\section{Online Gradient Descent}
+Online gradient descent is frequently utilized with stochastic gradient descent. Suppose that we want to run online gradient descent but cannot query the gradient of our convex function $f_t$, however we can construct a random vector variable $G_t$ that estimates $\nabla f_t$ at any $x_t$: \[\nabla f_t(x_t) = \mathbb{E}[G_t]\]
+Show that if we run Online Gradient Descent using $G_t$ as our gradient of $f_t$ at time $t$, then we have \[\mathbb{E}\left[\sum_{t = 0}^{T}f_t(x_t) - f_t(x^*)\right] \leq DG\sqrt{T}\] where $G$ in this case will satisfy $\mathbb{E}[||G_t||^2] \leq G^2$ for all $t$. 
+
+
+\section{Missing Proof Details}
+\begin{enumerate}
+    \item In Lecture 20 we assumed that the following convex body $K$ has diameter $O(\sqrt{n})$. Prove that.
+    \[K = \{ x\in \mathbb{R}^{n\times n}_{\geq 0} \mid \sum_{i} x_{ij}=1 \quad \forall j \quad \text{and}  \quad \sum_{j} x_{ij}=1 \quad  \forall i\}. \]
+    
+
+    \item In Lecture 21 while proving the minimax theorem, by applying OGD and taking $T$ large enough, we obtained
+    \[
+    \frac{1}{T} \sum_t M(x_t,a_t) \geq \frac{1}{T}\max_i \sum_t M(i,a_t) - \epsilon.
+    \]
+    Prove why the LHS is at most expression B and why the RHS is at least expression A$-\epsilon$ to complete the proof of the minimax theorem.
+
+    \item Suppose you run online gradient descent in $n$-dimensions where for all $t$,  $f_t(x)=\sum_{i=1}^n a^t_i x_i$ for some non-negative reals $a^t_i \in [0,A]$ and where convex body $K=\{ x\in \mathbb{R}^n_{\geq 0} \mid \sum_{i} x_i = B \}$ for some positive $B$. After $T$ iterations of online gradient descent, what is the best possible upper bound on the regret of the algorithm? (Give the answer in Big-O notation in terms of parameters $A,B$, and $n$.) 
+\end{enumerate}
+
+
+
+
+\section{Zero Sum Games}
+
+
+
+  Consider a  zero-sum game between players A and B with   A having actions $\{A_1,A_2\}$ and B having actions $\{B_1,B_2\}$.  The  entries in this table correspond to the rewards of  player A (i.e., the costs of player B):
+
+\begin{center}
+\begin{tabular}{c|c|c} 
+  & $B_1$ & $B_2$ \\ 
+  \hline
+ $A_1$ & 2 & -1 \\ 
+ \hline
+ $A_2$& -1& 1  \\ 
+\end{tabular}
+\end{center}
+
+\begin{enumerate}
+    \item If  player A has to commit a strategy before  player B (i.e.,  B will choose their best strategy/action knowing A's randomized strategy),  what strategy would they adopt and how much expected reward would it get? 
+
+(Hint: First solve for a general randomized strategy playing $A_1$ with probability $p$ and $A_2$ with probability $1-p$, and then optimize $p$.)
+
+\item Now answer the above question when player B has to first commit a strategy (and then player A chooses their best strategy/action): what strategy would B adopt and how much would be the expected cost? 
+
+\item Are the answers to both the above parts the same? Why does it agree with the minimax theorem?
+\end{enumerate}
+
+
+
+\section{Reductions: Dominating Set}
+Given a graph $G=(V,E)$, dominating set $S \subseteq V$ is a subset of vertices such that every vertex $v\in V$ has at least one neighbor in $S$. Dominating set problem asks to find the minimum dominating set of $G$. 
+
+\begin{enumerate}
+    \item Prove that an $\alpha$-approx algorithm for set cover implies an  $\alpha$-approx algorithm for dominating set.
+    
+
+    \item Prove that an $\alpha$-approx algorithm for dominating implies an $\alpha$-approx algorithm for set cover.
+    
+\end{enumerate}
+
+
+\section{Fine-Grained Complexity}
+Consider two variants of orthogonal vectors problem.
+\begin{itemize}
+    \item Problem A: Given set $S$ of $n$ vectors $s_1,\ldots, s_n$ in $\{0,1\}^d$, find two vectors $s_i,s_j$ that are orthogonal to each other.
+
+\item Problem B: Given two sets $V$, $W$  of $n/2$ vectors each in $\{0,1\}^d$, where $V=\{v_1,\ldots, v_{n/2}\}$ and $W=\{w_1,\ldots, w_{n/2} \}$, find two vectors $v_i,w_j$ that are orthogonal to each other.
+\end{itemize}
+
+Prove that these two problems are equivalent in the sense that  there exists $O(n^{2-\delta}d)$ runtime algorithm for one, where $\delta>0$ is some constant, iff there exists $O(n^{2-\delta}d)$ runtime algorithm for the other one.
+\appendix
+
+\section{Further Practice Problems}
+
+
+\subsection{Experts Problem}
+Prove that the greedy algorithm, which in each round $t\in [T]$ plays the best expert based on performance in rounds $\{1,\ldots, t-1\}$, could incur $\Omega(T)$ total regret.
+
+(Hint: There is an example already with $n=2$ experts.)
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

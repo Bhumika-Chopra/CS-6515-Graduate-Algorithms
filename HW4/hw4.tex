@@ -1,0 +1,138 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern} % removes bitmap font
+\usepackage{tikz}
+\usepackage{nicematrix}
+\input{./header.tex}
+
+\newcommand{\jan}[1]{\textcolor{red}{Jan: #1}}
+\newcommand{\sahil}[1]{\textcolor{blue}{Sahil: #1}}
+\newcommand{\dy}[1]{\textcolor{purple}{Daniel Y: #1}}
+\newcommand{\mx}[1]{\textcolor{blue}{Max: #1}}
+\newcommand{\sg}[1]{\textcolor{cyan}{Sharay: #1}}
+\newcommand{\ac}[1]{\textcolor{cyan}{Allen: #1}}
+\newcommand{\sera}[1]{\textcolor{magenta}{Sera: #1}}
+\newcommand{\frank}[1]{\textcolor{purple}{Frank: #1}}
+% \newcommand{\joe}[1]{\textcolor{brown}{Joe: #1}}
+\newcommand{\Varun}[1]{\textcolor{brown}{Varun: #1}}
+\newcommand{\aryan}[1]{\textcolor{red} {Aryan: #1}}
+
+\title{Linear Programming\\Problem Set 4 -- CS 6515/4540 (Fall 2025)}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-50pt}
+\noindent
+This problem set is due on \textbf{Thursday October 16th}. Submission is via Gradescope. Your solution must be a typed pdf (e.g.~via LaTeX) -- no handwritten solutions.
+
+
+
+%\paragraph{Additional Instruction:}
+
+%\jan{collecting exercise ideas.}
+\setcounter{section}{12}
+
+
+
+
+\section{Approx Algo}
+\begin{enumerate}
+\item  For the maximum matching problem in general unweighted graphs, prove that the greedy algorithm (order edges arbitrarily and add the next edge to matching if both vertices are free) returns a maximal\footnote{A matching $M$ is called maximal if there is no edge $e \in E$ such that $M \cup e$ is also a matching.} matching with size at least $1/2$ times the maximum matching. Also, give an example where maximal matching size is half of the maximum matching (in other words, the approx factor $1/2$ is tight).
+
+\item Consider placing $n$ items into $m$ bins. Item $i$ has weight $w_i$. We want to place these $n$ items into the bins such that the maximum total weight of a bin is minimized. Consider the following greedy algorithm: 
+
+Sort the weights $w_i$ in decreasing order. Going through the items in decreasing order of weight, we place each item in the bin with the least current load (as we iterate through the items and place more items into bins, the least loaded bin may change). 
+
+Show this algorithm gives a 1.5-approximation for the least possible maximum load of any placement of these $n$ items into the $m$ bins. 
+
+\end{enumerate}
+
+\section{LP-Based Set Cover}
+In the set cover problem, there is a universe of $n$ elements, say $[n]:=\{1,\ldots,n\}$, and there are $m$ subsets $S_1, \ldots, S_m \subseteq [n]$ that satisfy $\bigcup_i S_i = [n]$. The goal is to find  $T\subseteq [m]$ such that $\sum_{i\in T} S_i = [n]$ while minimizing the size $|T|$.
+
+\paragraph{Remark:} Observe that this problem captures the vertex cover problem if the elements correspond to the edges of the graph $G$ and the subsets correspond to edges incident to the same vertex in $G$.
+
+\medskip
+Prove that for the set cover problem, there is an $f$-approximation algorithm where $f$ is the maximum number of sets in which some element appears, i.e., $f:= \max_{e\in [n]} \sum_{i \in [m]} 1[e \in S_i]$. E.g., $f=2$ for vertex cover.
+
+
+
+
+\paragraph{Hint:}  First write an LP relaxation and then round it. Both these steps can be seen as generalizing the $2$-approx LP based algorithm for vertex cover.
+
+
+
+\section{Facility Location}
+For the facility location problem discussed in class, in this problem we want to improve the $6$-approx algorithm from class to a $4$-approximation algorithm. In particular, analyze the same algorithm from class except that now each ball $B_j$ has radius $4/3 \cdot L_j$ (instead of $2 L_j$) where $L_j := \sum_i d_{ij} y_{ij}^*$.
+\\ \\ 
+(You don't need to prove that the LP relaxation from class gives a lower bound on the optimum cost. But repeat any steps of the LP rounding analysis as needed.)
+\clearpage
+
+
+\section{Probability Theory}
+	
+
+        \begin{enumerate}
+        \item Give an example of a correlated distribution over two non-negative random variables, $X$ and $Y$, such that $\E[XY] \neq \E[X] \cdot \E[Y]$.
+
+
+        
+		\item  
+  Suppose there are $n$ distinct coupons $\{1,\ldots, n\}$. In each step, you draw a uniformly random coupon independently with replacement (i.e., you may redraw coupons), and you repeat this  until you have drawn \emph{all  $n$ coupons} at least once. 
+  
+        \begin{enumerate}
+      \item Prove that the expected number of total draws  is $O(n \log n)$.
+
+      \paragraph{Hint:} Use linearity of expectation.
+
+  
+        \item Prove that  with probability at least $1-1/n$, the process takes $O(n \log n)$ steps.
+        
+
+        \paragraph{Hint:} First calculate the probability that a particular coupon is never drawn after $O(n \log n)$ steps. Next, apply the union bound, which states that for any events $A,B$, we have $\Pr[A \cup B] \leq \Pr[A] + \Pr[B]$.
+
+   
+        
+        \end{enumerate}
+
+	
+
+	\end{enumerate}
+
+
+
+\section{Max 2-SAT}
+In the Max 2-SAT problem, there are $n$ boolean variables $\{x_1, \ldots,x_n\}$. We define a literal to mean a (boolean) variable or its negation. We are given 
+$m$ clauses $J_1  \cup  J_2$ of two types depending on the number of literals in them: each clause in $J_1$ consists of a single literal $y$ and a clause in $J_2$ is the OR of two literals, say $y \vee z$ 
+for some literals $y, z$. The goal is to find an assignment of the variables to maximize the number of satisfied clauses. (A clause in $J_1$ is satisfied if its literal is true and a clause in $J_2$ is satisfied if either of its literals are true.)
+
+Since the maximization problem is NP-Hard, we will design an LP based approximation algorithm. Consider the following LP  relaxation.
+We have a variable $z_j$ for the $j$th clause in $J_1 \cup J_2$, where the intended meaning is that it is $1$ if the assignment decides to satisfy that clause and $0$ otherwise. (Of course the LP can choose to give $z_j$ a fractional value.)
+\begin{align*}
+\max\quad  & \sum_{j \in J} z_j  \\
+ & 1 \geq x_i \geq 0 \qquad \forall i \\
+& z_j \leq 1\qquad \forall j \in J_1 \cup J_2\\
+ & y_{j1}  \geq z_j\qquad \forall j \in J_1 \\
+ & y_{j1} + y_{j2} \geq z_j\qquad \forall j \in J_2 
+ \end{align*}
+\noindent Here  $y_{j1}$ is shorthand for $x_i$ if the first 
+literal in the $j$th clause is the $i$th variable,
+and shorthand for $1-x_i$ if the literal is the negation of the $i$ variable. (Similarly for $y_{j2}$.)
+
+
+\begin{enumerate}
+    \item Prove that the optimal LP value is at least the maximum number of clauses that can be simultaneously satisfied by any assignment of the boolean variables.
+
+
+ 
+    \item  Suppose we  set each boolean variable to be true independently with probability $x_i$ and false otherwise, prove that the expected number of satisfied clauses is at least $\frac{3}{4} \sum_j z_j$ (i.e., at least $3/4$ times the optimal LP value), and hence we obtain a $3/4$ approximation in expectation.
+
+    \paragraph{Hint:} Use linearity of expectation.
+
+  
+
+\end{enumerate}
+
+
+
+\end{document}
